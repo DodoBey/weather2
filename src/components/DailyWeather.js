@@ -5,56 +5,57 @@ import windSock from '../icon/windsock.svg';
 import humidity from '../icon/humidity.svg';
 import sunRise from '../icon/sunrise.svg';
 import sunSet from '../icon/sunset.svg';
+import '../css/daily.css'
+import '../css/search.css'
 
 const DailyWeather = () => {
+    const [city, setCity] = useState("");
 
-    //Time convert
-    // const sunRiseHour = new Date(sunrise * 1000).getHours();
-    // const sunRiseMinute = new Date(sunrise * 1000).getMinutes();
-    // const riseTime = ((sunRiseHour)+":"+(sunRiseMinute));
-    
-
-    // const sunSetHour = new Date(sunset * 1000).getHours();
-    // const sunSetMinute = new Date(sunset * 1000).getMinutes();
-    // const setTime = ((sunSetHour)+":"+(sunSetMinute));
-    
-
+    const submitCity = (city, dispatch) => {
+        dispatch({ type: "SEARCH_CITY", payload: city})
+    }
     return (
         <Consumer>
             {(value) => (
                 <div>
-                    <div>
-                        <h1>{value.allData.name}</h1>
-                        <h2>{value.allData.weather[0].main}</h2>
-                        <h3>{Math.round(value.allData.main.temp)}°</h3>
+                    <div className="searchBar">
+                        <div><input type="text" placeholder="City Name" id="cityName" className="search_bar" onChange={e => setCity(e.target.value)}/></div>
+                        <div><button className="searchButton" onClick={() => submitCity(city, value.dispatch)}>Search City</button></div>
                     </div>
-                    <div>
+                    <div className="baseInfo">
+                        <h2 className="cityName">{value.city.toUpperCase()}</h2>
+                        <h3 className="mainStatus">{value.status.toUpperCase()}</h3>
+                        <h1 className="mainTemp">{Math.round(value.mainTemp)}°</h1>
+                    </div>
+                    <div className="extraInfo">
                         <div className="feelsLike">
+                            <img src={feelsLike}></img>
                             <span>
-                                <img src={feelsLike}></img>
-                                {Math.round(value.allData.main.feels_like)}°
+                                {Math.round(value.feelsLike)}°
                             </span>
                         </div>
                         <div className="wind">
+                            <img src={windSock}></img>
                             <span>
-                                <img src={windSock}></img>
-                                {Math.round(value.allData.wind.speed)}km/h
+                                {Math.round(value.windSpeed)}km/h
                             </span>
                         </div>
                         <div className="humidity">
-                            <span>
                             <img src={humidity}></img>
-                            {Math.round(value.allData.main.humidity)}%
+                            <span>
+                                {Math.round(value.humidity)}%
                             </span>
                         </div>
                         <div className="sunrise">
+                            <img src={sunRise}></img>
                             <span>
-
+                            {value.sunRise}
                             </span>
                         </div>
                         <div className="sunset">
+                            <img src={sunSet}></img>
                             <span>
-
+                            {value.sunSet}
                             </span>
                         </div>
                     </div>

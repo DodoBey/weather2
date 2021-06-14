@@ -1,13 +1,16 @@
 import './App.css';
 import DailyWeather from './components/DailyWeather';
-import { Provider } from './components/Context'
+import WeeklyWeather from './components/WeeklyWeather';
+import { Provider } from './components/Context';
+import BGVideo from './components/BGVideo';
+
 
 function App() {
   return (
     <Provider>
-    <div className="App">
       <DailyWeather/>
-    </div>
+      <WeeklyWeather/>
+      <BGVideo/>
     </Provider>
   );
 }
