@@ -10,17 +10,19 @@ const reducer = (state, action) => {
     switch (action.type) {
         case "SEARCH_CITY":
             return {
-                city: action.payload
+                city: action.payload,
             };
         default:
-            return state;
+            return (
+                state
+                );
     }
 }
 
 export class Provider extends React.Component {
     state = {
         allData: [],
-        city: "Istanbul",
+        city: "Mersin",
         dispatch: (action) => {
             this.setState((state) => reducer(state, action))
         },
@@ -42,7 +44,7 @@ export class Provider extends React.Component {
 
     localTime(time) {
         const localeValue = new Date(time * 1000);
-        const localeTime = localeValue.toLocaleTimeString([], {timeStyle: 'short'});
+        const localeTime = localeValue.toLocaleTimeString(['en-US'], {timeStyle: 'short'});
         return (
             localeTime
         )
@@ -60,8 +62,8 @@ export class Provider extends React.Component {
                     feelsLike: data.main.feels_like,
                     windSpeed: data.wind.speed,
                     humidity: data.main.humidity,
-                    sunRise: this.localTime(data.sys.sunrise + data.timezone),
-                    sunSet: this.localTime(data.sys.sunset + data.timezone),
+                    sunRise: this.localTime(data.sys.sunrise),
+                    sunSet: this.localTime(data.sys.sunset),
                     lat: data.coord.lat,
                     lon: data.coord.lon
                 });
@@ -73,7 +75,7 @@ export class Provider extends React.Component {
     }
 
     fetchWeekly() {
-        fetch(`${this.state.mainUrl}onecall?lat=${this.state.lat}&lon=${this.state.lon}&units=${this.state.units}&appid=${this.state.key}`).then(response => {
+        fetch(`${this.state.mainUrl}onecall?lat=${this.state.lat}&lon=${this.state.lon}&exclude=hourly,minutely,alerts&units=${this.state.units}&appid=${this.state.key}`).then(response => {
             if (response.status !== 200) {
                 console.log(`error ${response.status}`)
             }
@@ -121,14 +123,13 @@ export class Provider extends React.Component {
 
     componentDidMount() {
         this.fetchData();
-        this.bgvideoChanger()
         setTimeout(() => {
             this.fetchWeekly()
             this.bgvideoChanger()
-        }, 1000);
+        }, 300);
     };
 
-    componentDidUpdate(prevState) {
+    componentWillUpdate(prevState) {
         if (this.city !== prevState.city) {
             this.fetchData();
             setTimeout(() => {

@@ -9,17 +9,17 @@ import { useEffect, useState } from 'react';
 const WeeklyWeather = () => {
     const [currentDay, setCurrentDay] = useState("");
 
-    const CreateWeeklyDay = () => {
-        var day = new Date();
-        const arrDays = ["Sun","Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-        for( let i = 0; i < arrDays.length; i++){
-         setCurrentDay(arrDays[(day.getDay() + 1 + i) % 7])
-     }
-    }
+    // const CreateWeeklyDay = () => {
+    //     var day = new Date();
+    //     const arrDays = ["Sun","Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    //     for( let i = 0; i < 7; i++){
+    //      setCurrentDay(arrDays[(day.getDay() + 1 + i) % 7])
+    //  }
+    // }
 
-    useEffect(() => {
-        CreateWeeklyDay();
-    })
+    // useEffect(() => {
+    //     CreateWeeklyDay();
+    // })
 
     console.log(currentDay)
 
@@ -52,15 +52,41 @@ const WeeklyWeather = () => {
     return (
         <Consumer>
             {(value) => (
-                <div className="weeklyBar">
-                {value.weekly.splice(1).map((weekly) => (
-                    <div >
-                        <div><img src={CloudyImg}/></div>
+                // <div className="weeklyBar">
+                // {value.weekly.splice(1).map((weekly) => (
+                //     <div >
+                //         <div><img src={CloudyImg}/></div>
+                //         <div>{Math.round(weekly.temp.day)}°</div>
+                //         <div></div>
+                //     </div>
+                // )
+                // )}
+                // </div>
+                <div>
+                    {}
+                {value.weekly.splice(1).map((weekly) => {
+                    console.log(weekly.weather[0].main)
+                    let icon = "";
+                    switch (weekly.weather[0].main) {
+                        case "Clouds": {
+                            return icon = <img src={CloudyImg}></img>
+                        }
+                        case "Rain": {
+                            return icon = <img src={RainyImg}></img>
+                        }
+                        case "Clear": {
+                            return icon = <img src={ClearImg}></img>
+                        }
+                        case "Snow": {
+                            return icon = <img src={SnowyImg}></img>
+                        }
+                    }
+                    <div className="weeklyForecast">
+                        <div>{icon}</div>
                         <div>{Math.round(weekly.temp.day)}</div>
-                        <div>{currentDay}</div>
+                        <div>This Is Test</div>
                     </div>
-                )
-                )}
+                })}
                 </div>
             )}
         </Consumer>
